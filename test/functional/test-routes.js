@@ -14,7 +14,7 @@ describe('GET /', () => {
       .expect(200)
       .then(response => {
         expect(response.text).to.include(
-          'You are currently running a Node.js app built for the IBM Cloud.'
+          'Web service to connect volunteers with elderly/vulnerable people.'
         );
       });
   });

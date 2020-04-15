@@ -1,9 +1,3 @@
 node_modules
-node_modules_linux
 coverage
-server/localdev-config.json
-server/localdev-config.json
-vcap-local.js
-credentials.json
-localdev-config.json
-.nyc*
+.nyc_output
