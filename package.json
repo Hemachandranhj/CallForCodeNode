@@ -16,7 +16,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint"
+      "pre-commit": ""
     }
   },
   "nyc": {
@@ -37,6 +37,7 @@
   "dependencies": {
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
+    "mongoose": "^5.9.9",
     "swagger-ui-express": "^4.1.3"
   },
   "devDependencies": {

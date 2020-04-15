@@ -2,6 +2,7 @@
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 
 const healthRoutes = require('./routes/health-route');
 const swaggerRoutes = require('./routes/swagger-route');
@@ -25,9 +26,19 @@ app.all('', (req, res) => {
 
 // start node server
 const port = process.env.PORT || 3000;
-app.listen(port, () => {
-  console.log(`App UI available http://localhost:${port}`);
-  console.log(`Swagger UI available http://localhost:${port}/swagger/api-docs`);
+
+
+// Open the connection and start the service
+mongoose.connect
+('mongodb+srv://covidsquasher:covidsquasher@cluster0-yoauk.mongodb.net/assistanceService',
+ { useNewUrlParser: true }, function(err, database) {
+    if (err) throw err;
+    app.locals.database = database;
+    // Start the application after the database connection is ready
+    app.listen(port, () => {
+      console.log(`App UI available http://localhost:${port}`);
+      console.log(`Swagger UI available http://localhost:${port}/swagger/api-docs`);
+  });
 });
 
 // error handler for unmatched routes or api calls
