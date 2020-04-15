@@ -1,0 +1,11 @@
+applications:
+- buildpack: sdk-for-nodejs
+  command: npm start
+  domain: null
+  host: null
+  instances: 1
+  name: assistanceservice
+  random-route: true
+  routes:
+  - route: assistanceservice.eu-gb.cf.appdomain.cloud
+  timeout: 180

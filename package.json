@@ -1,23 +1,55 @@
 {
-  "name": "volunteerconnectservice",
+  "name": "assistanceservice",
   "version": "1.0.0",
-  "description": "",
-  "main": "app.js",
+  "description": "service to connect volunteers with elderly and vulnerable people",
+  "private": true,
+  "engines": {
+    "node": "^12.0.0"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon server/server.js",
+    "start": "node server/server.js",
+    "check-coverage": "nyc report --check-coverage --lines 100",
+    "lint": "eslint --ignore-path .gitignore .",
+    "fix": "eslint --ignore-path .gitignore . --fix",
+    "test": "nyc mocha test --recursive --exit"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Hemachandranhj/CallForCodeNode.git"
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint && npm run test && npm run check-coverage"
+    }
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Hemachandranhj/CallForCodeNode/issues"
+  "nyc": {
+    "check-coverage": true,
+    "per-file": true,
+    "lines": 100,
+    "statements": 100,
+    "functions": 100,
+    "branches": 100,
+    "exclude": [
+      "test"
+    ],
+    "reporter": [
+      "lcov",
+      "text-summary"
+    ]
   },
-  "homepage": "https://github.com/Hemachandranhj/CallForCodeNode#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "ibm-cloud-env": "^0",
+    "swagger-ui-express": "^4.1.3"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "eslint": "^6.8.0",
+    "eslint-config-strongloop": "^2.1.0",
+    "husky": "^4.2.3",
+    "mocha": "^7.1.1",
+    "nodemon": "^2.0.2",
+    "nyc": "^15.0.0",
+    "sinon": "^9.0.1",
+    "sinon-chai": "^3.5.0",
+    "supertest": "^4.0.2"
   }
 }
