@@ -1,0 +1,7 @@
+{
+  "clientId": "36dc8a20-12c8-403d-b8c9-661c75c03a3b",
+  "oauthServerUrl": "https://eu-gb.appid.cloud.ibm.com/oauth/v4/d4c26b49-79d9-4066-8ddb-9986b6fa4d58",
+  "profilesUrl": "https://eu-gb.appid.cloud.ibm.com",
+  "secret": "ZDYyMmIyY2MtYjEzYy00MWEwLWE3ZmEtMWJmMWQxZmFmZjNm",
+  "tenantId": "d4c26b49-79d9-4066-8ddb-9986b6fa4d58"
+}
