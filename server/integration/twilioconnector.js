@@ -26,14 +26,13 @@ class TwilioConnector {
          } );
     }
 
-    sendMessage(from, to, message, callbackUrl)
+    sendMessage(from, to, message)
     {
         return new Promise(function(resolve, reject) {
             client.messages.create({
                 body: message,
                 from: '+18142819718', 
-                to: '+44 7438 507419',
-                statusCallback: callbackUrl
+                to: '+44 7438 507419'
               }, function(err,message)
             {
                 if(err)

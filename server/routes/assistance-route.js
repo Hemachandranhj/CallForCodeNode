@@ -36,12 +36,12 @@ router.post('/', async function (req, res) {
     let myData = new assistance(assistanceData);
     await collection.insertOne(myData);
     var message = "We have received your message.Will be in touch shortly"; 
-    await connector.sendMessage(req.body.To,req.body.From,message,'');
+    await connector.sendMessage(req.body.To,req.body.From,message);
     res.send(messageText);
   }
   else
   {
-    await connector.sendMessage(req.body.To,req.body.From,errorMessage,'');
+    await connector.sendMessage(req.body.To,req.body.From,errorMessage);
     res.send(errorMessage);
   }
  
