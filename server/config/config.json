@@ -1,0 +1,11 @@
+{
+    "development": {
+        "connnectionString": "mongodb+srv://covidsquasher:covidsquasher@cluster0-yoauk.mongodb.net/assistanceService",
+        "port": "3000",
+        "accountSid": "AC4f5a81aa7fea225ffcb3ea6ea78f8707",
+        "authToken": "838aacfe059ad7f81adf25960962b084",
+        "messageFrom":"18142819718",
+        "messageTo":"+44 7438 507419" 
+
+    }
+}

@@ -8,6 +8,8 @@ const healthRoutes = require('./routes/health-route');
 const swaggerRoutes = require('./routes/swagger-route');
 const assistanceRoutes = require('./routes/assistance-route');
 
+const config = require('./config/config.js');
+
 const app = express();
 
 // enable parsing of http request body
@@ -25,12 +27,12 @@ app.all('', (req, res) => {
 });
 
 // start node server
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || global.gConfig.port;
 
 
 // Open the connection and start the service
 mongoose.connect
-('mongodb+srv://covidsquasher:covidsquasher@cluster0-yoauk.mongodb.net/assistanceService',
+(global.gConfig.connnectionString,
  { useNewUrlParser: true }, function(err, database) {
     if (err) throw err;
     app.locals.database = database;

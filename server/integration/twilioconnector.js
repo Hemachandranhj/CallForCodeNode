@@ -1,7 +1,6 @@
-// ToDo: Need to remove the hardcoded values
-
-const accountSid = 'AC4f5a81aa7fea225ffcb3ea6ea78f8707';
-const authToken = '838aacfe059ad7f81adf25960962b084';
+const config = require('../config/config.js');
+const accountSid = global.gConfig.accountSid;
+const authToken = global.gConfig.authToken;
 const client = require('twilio')(accountSid, authToken);
 
 class TwilioConnector {
@@ -31,8 +30,8 @@ class TwilioConnector {
         return new Promise(function(resolve, reject) {
             client.messages.create({
                 body: message,
-                from: '+18142819718', 
-                to: '+44 7438 507419'
+                from: global.gConfig.messageFrom, 
+                to: global.gConfig.messageTo
               }, function(err,message)
             {
                 if(err)
