@@ -45,7 +45,8 @@
     "cors": "^2.8.4",
     "express-enforces-ssl": "^1.1.0",
     "nconf": "^0.10.0",
-    "passport": "^0.3.2"
+    "passport": "^0.3.2",
+    "twilio": "^3.42.1"
   },
   "devDependencies": {
     "chai": "^4.2.0",

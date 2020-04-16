@@ -27,6 +27,7 @@ const userAttributeManager = appID.UserAttributeManager;
 const CALLBACK_URL = '/ibm/bluemix/appid/callback';
 
 const UI_BASE_URL = 'http://localhost:4200';
+const config = require('./config/config.js');
 
 const app = express();
 
@@ -45,12 +46,12 @@ app.all('', (req, res) => {
 });
 
 // start node server
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || global.gConfig.port;
 
 app.use(cors({ credentials: true, origin: UI_BASE_URL }));
 
 const isLocal = cfEnv.getAppEnv().isLocal;
-const config = getLocalConfig();
+const authconfig = getLocalConfig();
 configureSecurity();
 
 // Setup express application to use express-session middleware
@@ -74,10 +75,10 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 
-let webAppStrategy = new WebAppStrategy(config);
+let webAppStrategy = new WebAppStrategy(authconfig);
 passport.use(webAppStrategy);
 
-userAttributeManager.init(config);
+userAttributeManager.init(authconfig);
 
 // Configure passportjs with user serialization/deserialization.
 // This is required for authenticated session persistence accross
@@ -122,11 +123,24 @@ app.get('/auth/logged', (req, res) => {
     loggedInAs['email'] = req.user.email;
   }
 
+
   res.send({
-    logged: (req.session[WebAppStrategy.AUTH_CONTEXT]) ? true : false,
+    logged: req.session[WebAppStrategy.AUTH_CONTEXT] ? true : false,
     loggedInAs: loggedInAs,
   });
 });
+
+// Open the connection and start the service
+mongoose.connect(global.gConfig.connnectionString,
+  { useNewUrlParser: true }, function(err, database) {
+    if (err) throw err;
+    app.locals.database = database;
+    // Start the application after the database connection is ready
+    app.listen(port, () => {
+      console.log(`App UI available http://localhost:${port}`);
+      console.log(`Swagger UI available http://localhost:${port}/swagger/api-docs`);
+    });
+  });
 
 function isLoggedIn(req, res, next) {
   if (req.session[WebAppStrategy.AUTH_CONTEXT]) {
@@ -144,7 +158,8 @@ function getLocalConfig() {
     return {};
   }
   let config = {};
-  const localConfig = nconf.env().file(`${__dirname}/config/authConfig.json`).get();
+  const localConfig = nconf.env().file(`${__dirname}/config/authConfig.json`)
+    .get();
   const requiredParams = ['clientId', 'secret', 'tenantId', 'oauthServerUrl',
     'profilesUrl'];
   requiredParams.forEach(function(requiredParam) {
@@ -170,21 +185,6 @@ function configureSecurity() {
     app.use(express_enforces_ssl());
   }
 }
-
-
-
-// Open the connection and start the service
-mongoose.connect
-  ('mongodb+srv://covidsquasher:covidsquasher@cluster0-yoauk.mongodb.net/assistanceService',
-    { useNewUrlParser: true }, function (err, database) {
-      if (err) throw err;
-      app.locals.database = database;
-      // Start the application after the database connection is ready
-      app.listen(port, () => {
-        console.log(`App UI available http://localhost:${port}`);
-        console.log(`Swagger UI available http://localhost:${port}/swagger/api-docs`);
-      });
-    });
 
 // error handler for unmatched routes or api calls
 app.use((req, res, next) => {
