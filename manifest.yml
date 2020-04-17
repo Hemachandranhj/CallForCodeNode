@@ -1,9 +1,8 @@
 applications:
 - buildpack: sdk-for-nodejs
-  command: npm start
-  domain: null
-  host: null
+  command: npm start  
   instances: 1
+  memory: 128M
   name: assistanceservice
   random-route: true
   routes:

@@ -84,11 +84,11 @@ userAttributeManager.init(authconfig);
 // This is required for authenticated session persistence accross
 // HTTP requests. See passportjs docs for additional
 // information http://passportjs.org/docs
-passport.serializeUser(function(user, cb) {
+passport.serializeUser(function (user, cb) {
   cb(null, user);
 });
 
-passport.deserializeUser(function(obj, cb) {
+passport.deserializeUser(function (obj, cb) {
   cb(null, obj);
 });
 
@@ -110,7 +110,7 @@ app.get(CALLBACK_URL, passport.authenticate(WebAppStrategy.STRATEGY_NAME,
   { allowAnonymousLogin: true }));
 
 
-app.get('/auth/logout', function(req, res, next) {
+app.get('/auth/logout', function (req, res, next) {
   WebAppStrategy.logout(req);
   res.redirect(UI_BASE_URL);
 });
@@ -132,7 +132,7 @@ app.get('/auth/logged', (req, res) => {
 
 // Open the connection and start the service
 mongoose.connect(global.gConfig.connnectionString,
-  { useNewUrlParser: true }, function(err, database) {
+  { useNewUrlParser: true }, function (err, database) {
     if (err) throw err;
     app.locals.database = database;
     // Start the application after the database connection is ready
@@ -162,7 +162,7 @@ function getLocalConfig() {
     .get();
   const requiredParams = ['clientId', 'secret', 'tenantId', 'oauthServerUrl',
     'profilesUrl'];
-  requiredParams.forEach(function(requiredParam) {
+  requiredParams.forEach(function (requiredParam) {
     if (!localConfig[requiredParam]) {
       // console.error('When running locally, make sure to create a file
       // *config.json* in the root directory. See config.template.json
