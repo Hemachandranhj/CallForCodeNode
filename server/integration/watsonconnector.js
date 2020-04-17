@@ -1,13 +1,16 @@
 const AssistantV2 = require('ibm-watson/assistant/v2');
 const { IamAuthenticator } = require('ibm-watson/auth');
+const getCredential = require('../service/credential-service');
 require('../config/config.js');
+
+const credential = getCredential('conversation');
 
 const assistant = new AssistantV2({
   version: global.gConfig.watsonAssistantVersion,
   authenticator: new IamAuthenticator({
-    apikey: global.gConfig.watsonApikey,
+    apikey: credential.apikey || global.gConfig.watsonApikey,
   }),
-  url: global.gConfig.watsonApiUrl,
+  url: credential.url || global.gConfig.watsonApiUrl,
 });
 
 function createSession() {

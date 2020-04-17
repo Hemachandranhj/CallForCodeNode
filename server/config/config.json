@@ -2,13 +2,13 @@
     "development": {
         "connnectionString": "mongodb+srv://covidsquasher:covidsquasher@cluster0-yoauk.mongodb.net/assistanceService",
         "port": "3000",
-        "accountSid": "AC4f5a81aa7fea225ffcb3ea6ea78f8707",
-        "authToken": "838aacfe059ad7f81adf25960962b084",
+        "accountSid": "sid",
+        "authToken": "token",
         "messageFrom":"18142819718",
         "messageTo":"+44 7438 507419" ,
         "watsonApiUrl":"https://api.eu-gb.assistant.watson.cloud.ibm.com/instances/c507fa60-71cd-4d22-bbee-2a4230134b7f",
-        "watsonApikey":"I6lmZSbI_Z55m1dpIXjHQVXPPsbHLISPnWd_NeIMaJwQ",
-        "watsonAssistantId":"6b06ff83-20ba-4290-b53c-b67a2b90c108",
+        "watsonApikey":"key",
+        "watsonAssistantId":"id",
         "watsonAssistantVersion":"2020-04-01"
 
     }
