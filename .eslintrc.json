@@ -5,8 +5,13 @@
         "mocha": true
     },
     "extends": "strongloop",
-    "parserOptions": { 
+    "parserOptions": {
         "ecmaVersion": 6,
         "sourceType": "module"
+    },
+    "rules": {
+        "semi": ["error", "always"],
+        "indent": ["error", 4],
+        "quotes": ["error", "double"]
     }
 }

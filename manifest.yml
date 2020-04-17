@@ -1,11 +1,14 @@
 applications:
-- buildpack: sdk-for-nodejs
-  command: npm start
-  domain: null
-  host: null
+- buildpacks: 
+  - sdk-for-nodejs
+  command: npm start  
   instances: 1
+  memory: 128M
   name: assistanceservice
   random-route: true
   routes:
   - route: assistanceservice.eu-gb.cf.appdomain.cloud
+  services:
+  - Twilio Programmable SMS-0y
+  - Watson Assistant-1g
   timeout: 180
