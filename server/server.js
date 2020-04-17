@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 const healthRoutes = require('./routes/health-route');
 const swaggerRoutes = require('./routes/swagger-route');
 const assistanceRoutes = require('./routes/assistance-route');
+const authRoutes = require('./routes/auth-route');
 
 const session = require('express-session');
 const passport = require('passport');
@@ -39,6 +40,7 @@ app.use(bodyParser.json());
 app.use('/health', healthRoutes);
 app.use('/swagger', swaggerRoutes);
 app.use('/assistance', assistanceRoutes);
+app.use('/auth', authRoutes);
 
 // default path to serve up index.html (single page application)
 app.all('', (req, res) => {
