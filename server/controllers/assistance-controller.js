@@ -38,7 +38,7 @@ exports.storeAssistanceRequest = async (req, res) => {
         var messages = messageText.split('#');
         var errorMessage = validateMessage(messages);
         if (errorMessage === '') {
-            const intents = getIntents(messages[0]);
+            const intents = await getIntents(messages[0]);
 
             var assistanceData = {
                 name: messages[1],
