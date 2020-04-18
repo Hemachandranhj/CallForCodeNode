@@ -4,12 +4,13 @@
         "port": "3000",
         "accountSid": "sid",
         "authToken": "token",
-        "messageFrom":"18142819718",
-        "messageTo":"+44 7438 507419" ,
-        "watsonApiUrl":"https://api.eu-gb.assistant.watson.cloud.ibm.com/instances/c507fa60-71cd-4d22-bbee-2a4230134b7f",
-        "watsonApikey":"key",
-        "watsonAssistantId":"id",
-        "watsonAssistantVersion":"2020-04-01"
-
+        "messageFrom": "18142819718",
+        "messageTo": "+44 7438 507419",
+        "watsonApiUrl": "https://api.eu-gb.assistant.watson.cloud.ibm.com/instances/c507fa60-71cd-4d22-bbee-2a4230134b7f",
+        "watsonApikey": "key",
+        "watsonAssistantId": "id",
+        "watsonAssistantVersion": "2020-04-01",
+        "UI_BASE_URL": "http://localhost:4200",
+        "API_BASE_URL": "http://localhost:3000"
     }
 }

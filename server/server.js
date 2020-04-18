@@ -1,4 +1,5 @@
 // import dependencies and initialize express
+require("./config/config");
 const express = require("express");
 const path = require("path");
 const bodyParser = require("body-parser");
@@ -21,13 +22,10 @@ const cors = require("cors");
 
 const WebAppStrategy = appID.WebAppStrategy;
 const userAttributeManager = appID.UserAttributeManager;
-// const UnauthorizedException = appID.UnauthorizedException;
 
-// const LOGIN_URL = '/ibm/bluemix/appid/login';
-const CALLBACK_URL = "/ibm/bluemix/appid/callback";
+const CALLBACK_URL = "/";
 
-const UI_BASE_URL = "http://localhost:4200";
-// const config = require("./config/config.js");
+const UI_BASE_URL = global.gConfig.UI_BASE_URL;
 
 const app = express();
 
@@ -40,11 +38,6 @@ app.use("/health", healthRoutes);
 app.use("/swagger", swaggerRoutes);
 app.use("/assistance", assistanceRoutes);
 
-// default path to serve up index.html (single page application)
-app.all("", (req, res) => {
-    res.status(200).sendFile(path.join(__dirname, "../public", "index.html"));
-});
-
 // start node server
 const port = process.env.PORT || global.gConfig.port;
 
@@ -54,10 +47,6 @@ const isLocal = cfEnv.getAppEnv().isLocal;
 const authconfig = getLocalConfig();
 configureSecurity();
 
-// Setup express application to use express-session middleware
-// Must be configured with proper session storage for production
-// environments. See https://github.com/expressjs/session for
-// additional documentation
 app.use(
     session({
         secret: "keyboardcat",
@@ -81,10 +70,6 @@ passport.use(webAppStrategy);
 
 userAttributeManager.init(authconfig);
 
-// Configure passportjs with user serialization/deserialization.
-// This is required for authenticated session persistence accross
-// HTTP requests. See passportjs docs for additional
-// information http://passportjs.org/docs
 passport.serializeUser(function(user, cb) {
     cb(null, user);
 });
@@ -93,30 +78,15 @@ passport.deserializeUser(function(obj, cb) {
     cb(null, obj);
 });
 
-// Protected area. If current user is not authenticated - redirect to the
-// login widget will be returned. In case user is authenticated - a page with
-// current user information will be returned.
 app.get(
     "/auth/login",
     passport.authenticate(WebAppStrategy.STRATEGY_NAME, {
-        sxuccessRedirect: UI_BASE_URL,
+        successRedirect: UI_BASE_URL + "/dashboard",
         forceLogin: true,
     })
 );
 
-// Callback to finish the authorization process. Will retrieve access and
-// identity tokens/ from AppID service and redirect to either (in below order)
-// 1. the original URL of the request that triggered authentication, as
-// persisted in HTTP session under WebAppStrategy.ORIGINAL_URL key.
-// 2. successRedirect as specified in passport.authenticate(name,
-//   {successRedirect: "...."}) invocation
-// 3. application root ("/")
-app.get(
-    CALLBACK_URL,
-    passport.authenticate(WebAppStrategy.STRATEGY_NAME, {
-        allowAnonymousLogin: true,
-    })
-);
+app.get(CALLBACK_URL, passport.authenticate(WebAppStrategy.STRATEGY_NAME));
 
 app.get("/auth/logout", function(req, res, next) {
     WebAppStrategy.logout(req);
@@ -128,6 +98,7 @@ app.get("/auth/logged", (req, res) => {
     if (req.session[WebAppStrategy.AUTH_CONTEXT]) {
         loggedInAs["name"] = req.user.name;
         loggedInAs["email"] = req.user.email;
+        loggedInAs["accessToken"] = req.session[WebAppStrategy.AUTH_CONTEXT].accessToken;
     }
 
     res.send({
@@ -153,16 +124,6 @@ mongoose.connect(
     }
 );
 
-function isLoggedIn(req, res, next) {
-    if (req.session[WebAppStrategy.AUTH_CONTEXT]) {
-        next();
-    } else {
-        res.redirect(UI_BASE_URL);
-    }
-}
-
-app.use("/user/*", isLoggedIn);
-
 function getLocalConfig() {
     if (!isLocal) {
         return {};
@@ -181,15 +142,12 @@ function getLocalConfig() {
     ];
     requiredParams.forEach(function(requiredParam) {
         if (!localConfig[requiredParam]) {
-            // console.error('When running locally, make sure to create a file
-            // *config.json* in the root directory. See config.template.json
-            // for an example of a configuration file.');
             console.error(`Required parameter is missing: ${requiredParam}`);
             process.exit(1);
         }
         config[requiredParam] = localConfig[requiredParam];
     });
-    config["redirectUri"] = `http://localhost:${port}${CALLBACK_URL}`;
+    config["redirectUri"] = global.gConfig.API_BASE_URL;
     return config;
 }
 
