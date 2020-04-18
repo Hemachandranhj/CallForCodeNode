@@ -1,8 +1,8 @@
-const vcapServices = require('vcap_services');
+const vcapServices = require("vcap_services");
 
 function getCredentials(sereviceName) {
-  const credentials = vcapServices.findCredentials({ service: sereviceName });
-  return credentials;
+    const credentials = vcapServices.findCredentials({ service: sereviceName });
+    return credentials;
 }
 
 module.exports = getCredentials;
