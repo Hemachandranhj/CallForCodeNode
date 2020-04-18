@@ -12,7 +12,7 @@ const assistanceRoutes = require("./routes/assistance-route");
 const session = require("express-session");
 const passport = require("passport");
 const nconf = require("nconf");
-const appID = require("bluemix-appid");
+const appID = require("ibmcloud-appid");
 
 const helmet = require("helmet");
 const express_enforces_ssl = require("express-enforces-ssl");
@@ -21,7 +21,6 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
 const WebAppStrategy = appID.WebAppStrategy;
-const userAttributeManager = appID.UserAttributeManager;
 
 const CALLBACK_URL = "/";
 
@@ -67,8 +66,6 @@ app.use(passport.session());
 
 let webAppStrategy = new WebAppStrategy(authconfig);
 passport.use(webAppStrategy);
-
-userAttributeManager.init(authconfig);
 
 passport.serializeUser(function(user, cb) {
     cb(null, user);
