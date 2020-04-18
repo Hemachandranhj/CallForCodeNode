@@ -1,25 +1,25 @@
-// import dependencies and initialize express
-const express = require('express');
-const path = require('path');
-const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
+// local - import dependencies and initialize express
 
-const healthRoutes = require('./routes/health-route');
-const swaggerRoutes = require('./routes/swagger-route');
-const assistanceRoutes = require('./routes/assistance-route');
-const authRoutes = require('./routes/auth-route');
+const express = require("express");
+const path = require("path");
+const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
 
-const session = require('express-session');
-const passport = require('passport');
-const nconf = require('nconf');
-const appID = require('bluemix-appid');
+const healthRoutes = require("./routes/health-route");
+const swaggerRoutes = require("./routes/swagger-route");
+const assistanceRoutes = require("./routes/assistance-route");
+const authRoutes = require("./routes/auth-route");
 
-const helmet = require('helmet');
-const express_enforces_ssl = require('express-enforces-ssl');
-const cfEnv = require('cfenv');
-const cookieParser = require('cookie-parser');
-const cors = require('cors');
-require("./config/config");
+const session = require("express-session");
+const passport = require("passport");
+const nconf = require("nconf");
+const appID = require("ibmcloud-appid");
+
+const helmet = require("helmet");
+const express_enforces_ssl = require("express-enforces-ssl");
+const cfEnv = require("cfenv");
+const cookieParser = require("cookie-parser");
+const cors = require("cors");
 
 const WebAppStrategy = appID.WebAppStrategy;
 
@@ -34,10 +34,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // routes and api calls
-app.use('/health', healthRoutes);
-app.use('/swagger', swaggerRoutes);
-app.use('/assistance', assistanceRoutes);
-app.use('/auth', authRoutes);
+app.use("/health", healthRoutes);
+app.use("/swagger", swaggerRoutes);
+app.use("/assistance", assistanceRoutes);
+app.use("/auth", authRoutes);
 
 // start node server
 const port = process.env.PORT || global.gConfig.port;

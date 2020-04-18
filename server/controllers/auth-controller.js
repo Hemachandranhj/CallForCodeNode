@@ -1,30 +1,30 @@
-const express = require('express');
-const session = require('express-session');
-const passport = require('passport');
-const nconf = require('nconf');
-const appID = require('bluemix-appid');
+const express = require("express");
+const session = require("express-session");
+const passport = require("passport");
+const nconf = require("nconf");
+const appID = require("ibmcloud-appid");
 
-const helmet = require('helmet');
-const express_enforces_ssl = require('express-enforces-ssl');
-const cfEnv = require('cfenv');
-const cookieParser = require('cookie-parser');
-const cors = require('cors');
+const helmet = require("helmet");
+const express_enforces_ssl = require("express-enforces-ssl");
+const cfEnv = require("cfenv");
+const cookieParser = require("cookie-parser");
+const cors = require("cors");
 
 const WebAppStrategy = appID.WebAppStrategy;
 const userAttributeManager = appID.UserAttributeManager;
 const UnauthorizedException = appID.UnauthorizedException;
 
-const LOGIN_URL = '/ibm/bluemix/appid/login';
-const CALLBACK_URL = '/ibm/bluemix/appid/callback';
+const LOGIN_URL = "/ibm/bluemix/appid/login";
+const CALLBACK_URL = "/ibm/bluemix/appid/callback";
 
-const UI_BASE_URL = 'http://localhost:4200';
+const UI_BASE_URL = "http://localhost:4200";
 
 var app = express();
 app.use(cors({ credentials: true, origin: UI_BASE_URL }));
 
 const isLocal = cfEnv.getAppEnv().isLocal;
 const config = getLocalConfig();
-//configureSecurity();
+// configureSecurity();
 
 // Setup express application to use express-session middleware
 // Must be configured with proper session storage for production
@@ -56,19 +56,19 @@ const config = getLocalConfig();
 // for authenticated session persistence accross HTTP requests. See passportjs docs
 // for additional information http://passportjs.org/docs
 passport.serializeUser(function(user, cb) {
-  cb(null, user);
+    cb(null, user);
 });
 
 passport.deserializeUser(function(obj, cb) {
-  cb(null, obj);
+    cb(null, obj);
 });
 
 
 // User login
 exports.login = (req, res) => {
-  console.log('In auth controller - login');
-  passport.authenticate(WebAppStrategy.STRATEGY_NAME,
-    { successRedirect: UI_BASE_URL, forceLogin: true });
+    console.log("In auth controller - login");
+    passport.authenticate(WebAppStrategy.STRATEGY_NAME,
+        { successRedirect: UI_BASE_URL, forceLogin: true });
 };
 
 
@@ -78,28 +78,28 @@ exports.login = (req, res) => {
 // 2. successRedirect as specified in passport.authenticate(name, {successRedirect: "...."}) invocation
 // 3. application root ("/")
 exports.callbackAuthorization = (req, res) => {
-  console.log('In auth controller - callbackAuthorization');
-  passport.authenticate(WebAppStrategy.STRATEGY_NAME,
-    { allowAnonymousLogin: true });
+    console.log("In auth controller - callbackAuthorization");
+    passport.authenticate(WebAppStrategy.STRATEGY_NAME,
+        { allowAnonymousLogin: true });
 };
 
 exports.logout = (req, res, next) => {
-  console.log('In auth controller - logout');
-  WebAppStrategy.logout(req);
-  res.redirect(UI_BASE_URL);
+    console.log("In auth controller - logout");
+    WebAppStrategy.logout(req);
+    res.redirect(UI_BASE_URL);
 };
 
 exports.logged = (req, res) => {
-  let loggedInAs = {};
-  if (req.session[WebAppStrategy.AUTH_CONTEXT]) {
-    loggedInAs['name'] = req.user.name;
-    loggedInAs['email'] = req.user.email;
-  }
+    let loggedInAs = {};
+    if (req.session[WebAppStrategy.AUTH_CONTEXT]) {
+        loggedInAs["name"] = req.user.name;
+        loggedInAs["email"] = req.user.email;
+    }
 
-  res.send({
-    logged: !!req.session[WebAppStrategy.AUTH_CONTEXT],
-    loggedInAs: loggedInAs,
-  });
+    res.send({
+        logged: !!req.session[WebAppStrategy.AUTH_CONTEXT],
+        loggedInAs: loggedInAs,
+    });
 };
 
 // function isLoggedIn(req, res, next) {
@@ -114,25 +114,25 @@ exports.logged = (req, res) => {
 
 function getLocalConfig() {
 // const config = require('../config/authConfig.json')
-  if (!isLocal) {
-    return {};
-  }
-  let config = {};
-  const port = process.env.PORT || global.gConfig.port;
-  const localConfig = nconf.env().file('./server/config/authConfig.json').get();
-  const requiredParams = ['clientId', 'secret', 'tenantId', 'oauthServerUrl', 'profilesUrl'];
-  requiredParams.forEach(function(requiredParam) {
-    if (!localConfig[requiredParam]) {
-    //   console.error('When running locally, make sure to create a file
-    //   *config.json* in the root directory. See config.template.json for an
-    //   example of a configuration file.');
-      console.error(`Required parameter is missing: ${requiredParam}`);
-      process.exit(1);
+    if (!isLocal) {
+        return {};
     }
-    config[requiredParam] = localConfig[requiredParam];
-  });
-  config['redirectUri'] = `http://localhost:${port}${CALLBACK_URL}`;
-  return config;
+    let config = {};
+    const port = process.env.PORT || global.gConfig.port;
+    const localConfig = nconf.env().file("./server/config/authConfig.json").get();
+    const requiredParams = ["clientId", "secret", "tenantId", "oauthServerUrl", "profilesUrl"];
+    requiredParams.forEach(function(requiredParam) {
+        if (!localConfig[requiredParam]) {
+            //   console.error('When running locally, make sure to create a file
+            //   *config.json* in the root directory. See config.template.json for an
+            //   example of a configuration file.');
+            console.error(`Required parameter is missing: ${requiredParam}`);
+            process.exit(1);
+        }
+        config[requiredParam] = localConfig[requiredParam];
+    });
+    config["redirectUri"] = `http://localhost:${port}${CALLBACK_URL}`;
+    return config;
 }
 
 
