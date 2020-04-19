@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const TwilioConnector = require("../integration/twilioconnector");
 const getIntents = require("../integration/watsonconnector");
+const {ObjectId} = require('mongodb');
 
 const assistanceSchema = new mongoose.Schema({
     name: String,
@@ -24,6 +25,44 @@ function validateMessage(messages) {
 
     return errorMessage;
 }
+
+// get all assistance
+exports.getAssistance = async (req, res) => {
+    let db = req.app.locals.database;
+    let collection = db.collection("assistance");
+    collection.find({}).sort({ date: -1 }).toArray(function(err, result){
+        if(err)
+        {
+            res.json({ error: err.message })            
+        }
+        res.json({result})
+    });
+};
+
+// accept assistance request
+exports.acceptRequest = async (req, res) => {
+    if (req.body.id) {
+        let db = req.app.locals.database;
+        let collection = db.collection("assistance");
+        await collection.updateOne(
+            { "_id" : ObjectId(req.body.id) },
+            { $set: { "isActioned" : true } },
+            function(err,doc) {
+            if (err) { 
+            throw err; 
+            }
+
+            else { 
+                // const connector = new TwilioConnector();
+                // var message = "We have accepted your request. Our volunter " + req.body.name + " will call you shortly to help you";
+                // connector.sendMessage(req.body.from, req.body.phone, message);
+            }
+        res.json({ message: "Accepted" });
+      });
+    } else {
+        res.json({ error: "Bad request" });
+    }    
+};
 
 // store assistance request
 exports.storeAssistanceRequest = async (req, res) => {
