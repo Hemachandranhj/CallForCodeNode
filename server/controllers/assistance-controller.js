@@ -11,6 +11,7 @@ const assistanceSchema = new mongoose.Schema({
     tag: [String],
     date: { type: Date, default: Date.now },
     isActioned: { type: Boolean, default: false },
+    messageStatus: String,
 });
 
 const assistance = mongoose.model("assistance", assistanceSchema);
@@ -66,7 +67,7 @@ exports.acceptRequest = async (req, res) => {
 
 // store assistance request
 exports.storeAssistanceRequest = async (req, res) => {
-    if (req.body.MessageSid && req.body.messageStatus === "delivered") {
+    if (req.body.MessageSid) {
         let db = req.app.locals.database;
         let collection = db.collection("assistance");
         const connector = new TwilioConnector();
@@ -84,6 +85,7 @@ exports.storeAssistanceRequest = async (req, res) => {
                 itemRequested: messages[0],
                 address: messages[2],
                 tag: intents,
+                messageStatus: req.body.messageStatus,
             };
             let myData = new assistance(assistanceData);
             await collection.insertOne(myData);
