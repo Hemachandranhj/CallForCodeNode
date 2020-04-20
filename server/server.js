@@ -124,9 +124,9 @@ mongoose.connect(
 );
 
 function getLocalConfig() {
-    if (!isLocal) {
-        return {};
-    }
+    // if (!isLocal) {
+    //     return {};
+    // }
     let config = {};
     const localConfig = nconf
         .env()
