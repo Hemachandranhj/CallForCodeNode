@@ -66,7 +66,7 @@ exports.acceptRequest = async (req, res) => {
 
 // store assistance request
 exports.storeAssistanceRequest = async (req, res) => {
-    if (req.body.MessageSid) {
+    if (req.body.MessageSid && req.body.messageStatus === "delivered") {
         let db = req.app.locals.database;
         let collection = db.collection("assistance");
         const connector = new TwilioConnector();
