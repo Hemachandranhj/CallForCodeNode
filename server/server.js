@@ -33,6 +33,8 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+app.use(cors({ credentials: true, origin: UI_BASE_URL }));
+
 // routes and api calls
 app.use("/health", healthRoutes);
 app.use("/swagger", swaggerRoutes);
@@ -41,8 +43,6 @@ app.use("/auth", authRoutes);
 
 // start node server
 const port = process.env.PORT || global.gConfig.port;
-
-app.use(cors({ credentials: true, origin: UI_BASE_URL }));
 
 const isLocal = cfEnv.getAppEnv().isLocal;
 const authconfig = getLocalConfig();

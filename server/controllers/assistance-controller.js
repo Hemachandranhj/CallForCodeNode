@@ -53,9 +53,9 @@ exports.acceptRequest = async (req, res) => {
             }
 
             else { 
-                // const connector = new TwilioConnector();
-                // var message = "We have accepted your request. Our volunter " + req.body.name + " will call you shortly to help you";
-                // connector.sendMessage(req.body.from, req.body.phone, message);
+                const connector = new TwilioConnector();
+                var message = "We have accepted your request. Our volunter " + req.body.name + " will call you shortly to help you";
+                connector.sendMessage(req.body.from, req.body.phone, message);
             }
         res.json({ message: "Accepted" });
       });
