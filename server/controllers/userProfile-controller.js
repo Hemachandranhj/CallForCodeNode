@@ -32,7 +32,7 @@ function validateMessage(messages) {
 exports.getUserProfile = async (req, res) => {
     let db = req.app.locals.database;
     let collection = db.collection("userProfile");
-    const query = { email: req.body.email};
+    const query = { email: req.query.email};
     collection.find(query).toArray(function (err, result) {
         if (err) {
             res.json({ error: err.message })
