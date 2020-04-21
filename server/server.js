@@ -41,7 +41,7 @@ app.use("/health", healthRoutes);
 app.use("/swagger", swaggerRoutes);
 app.use("/assistance", assistanceRoutes);
 app.use("/auth", authRoutes);
-app.user("/profile", userProfileRoutes);
+app.use("/profile", userProfileRoutes);
 
 // start node server
 const port = process.env.PORT || global.gConfig.port;

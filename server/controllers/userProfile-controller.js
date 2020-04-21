@@ -32,7 +32,8 @@ function validateMessage(messages) {
 exports.getUserProfile = async (req, res) => {
     let db = req.app.locals.database;
     let collection = db.collection("userProfile");
-    collection.find({}).sort({ date: -1 }).toArray(function (err, result) {
+    const query = { email: req.body.email};
+    collection.find(query).toArray(function (err, result) {
         if (err) {
             res.json({ error: err.message })
         }
@@ -42,12 +43,28 @@ exports.getUserProfile = async (req, res) => {
 
 // accept userProfile request
 exports.updateProfileRequest = async (req, res) => {
-    if (req.body.id) {
+    if (req.body.email) {
         let db = req.app.locals.database;
         let collection = db.collection("userProfile");
+        let userProfileRequest = req.body;
+
+        var userProfileData = {
+            // firstName: userProfileRequest.firstName,
+            // lastName: userProfileRequest.lastName,
+            // email: userProfileRequest.email,
+            contactNumber: userProfileRequest.contactNumber,
+            AddressLine1: userProfileRequest.AddressLine1,
+            AddressLine2: userProfileRequest.AddressLine2,
+            AddressLine3: userProfileRequest.AddressLine3,
+            city: userProfileRequest.city,
+            country: userProfileRequest.country,
+            postCode: userProfileRequest.postCode
+        };
+
+        let myData = new userProfile(userProfileData);
         await collection.updateOne(
-            { "_id": ObjectId(req.body.id) },
-            { $set: { "isActioned": true } },
+            { "email": req.body.email },
+            { $set: userProfileData },
             function (err, doc) {
                 if (err) {
                     throw err;
@@ -55,7 +72,7 @@ exports.updateProfileRequest = async (req, res) => {
                 else {
                     var message = "User profile successfully submitted for user" + req.body.email;
                 }
-                res.json({ message: "Accepted" });
+                res.json({ message: message });
             });
     } else {
         res.json({ error: "Bad request" });
@@ -64,12 +81,10 @@ exports.updateProfileRequest = async (req, res) => {
 
 // store userProfile request
 exports.postUserProfileRequest = async (req, res) => {
-    if (req.body.MessageSid) {
         let db = req.app.locals.database;
         let collection = db.collection("userProfile");
 
         let userProfileRequest = req.body;
-        const intents = await getIntents(messages[0]);
 
         var userProfileData = {
             firstName: userProfileRequest.firstName,
@@ -89,5 +104,4 @@ exports.postUserProfileRequest = async (req, res) => {
         var messageText =
             "User profile has been submitted successfully";
         res.json({ message: messageText });
-    }
 };
