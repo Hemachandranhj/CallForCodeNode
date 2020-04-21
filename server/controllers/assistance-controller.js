@@ -10,8 +10,7 @@ const assistanceSchema = new mongoose.Schema({
     address: String,
     tag: [String],
     date: { type: Date, default: Date.now },
-    isActioned: { type: Boolean, default: false },
-    messageStatus: String,
+    isActioned: { type: Boolean, default: false },   
 });
 
 const assistance = mongoose.model("assistance", assistanceSchema);
@@ -67,36 +66,38 @@ exports.acceptRequest = async (req, res) => {
 
 // store assistance request
 exports.storeAssistanceRequest = async (req, res) => {
-    if (req.body.MessageSid) {
+    if (req.body.MessageSid) {       
         let db = req.app.locals.database;
         let collection = db.collection("assistance");
-        const connector = new TwilioConnector();
-        let messageText = await connector.getMessageBody(req.body.MessageSid);
+        const connector = new TwilioConnector();       
+        let messageDetails = await connector.getMessage(req.body.MessageSid);      
         const textToRemove = "Sent from your Twilio trial account - ";
+        let messageText = messageDetails.body;
         messageText = messageText.replace(textToRemove, "");
-        var messages = messageText.split("#");
-        var errorMessage = validateMessage(messages);
-        if (errorMessage === "") {
+        const messages = messageText.split("#");
+        let errorMessage = validateMessage(messages);
+        const messageStatus = messageDetails.status;        
+        if (errorMessage === "" && messageStatus === 'delivered') {
             const intents = await getIntents(messages[0]);
 
             var assistanceData = {
                 name: messages[1],
-                phone: req.body.From,
+                phone: messageDetails.from,
                 itemRequested: messages[0],
                 address: messages[2],
-                tag: intents,
-                messageStatus: req.body.messageStatus,
+                tag: intents,               
             };
             let myData = new assistance(assistanceData);
             await collection.insertOne(myData);
             var message =
                 "We have received your message.Will be in touch shortly";
-            await connector.sendMessage(req.body.To, req.body.From, message);
+           await connector.sendMessage(messageDetails.from, messageDetails.to, message);
+           
             res.json({ message: messageText });
         } else {
             await connector.sendMessage(
-                req.body.To,
-                req.body.From,
+                messageDetails.from,
+                messageDetails.to,
                 errorMessage
             );
             res.json({ error: errorMessage });

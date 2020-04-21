@@ -10,7 +10,7 @@ class TwilioConnector {
     constructor() {
 
     }
-    getMessageBody(messageId) {
+    getMessage(messageId) {
         const client = require("twilio")(accountSid, authToken);
         return new Promise(function(resolve, reject) {
             client.messages(messageId)
@@ -18,7 +18,7 @@ class TwilioConnector {
                     if (err) {
                         reject(err);
                     } else {
-                        resolve(message.body);
+                        resolve(message);
                     }
                 });
         });
