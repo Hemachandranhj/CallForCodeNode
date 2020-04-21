@@ -9,6 +9,7 @@ const healthRoutes = require("./routes/health-route");
 const swaggerRoutes = require("./routes/swagger-route");
 const assistanceRoutes = require("./routes/assistance-route");
 const authRoutes = require("./routes/auth-route");
+const userProfileRoutes = require("./routes/userProfile-route");
 
 const session = require("express-session");
 const passport = require("passport");
@@ -40,6 +41,7 @@ app.use("/health", healthRoutes);
 app.use("/swagger", swaggerRoutes);
 app.use("/assistance", assistanceRoutes);
 app.use("/auth", authRoutes);
+app.user("/profile", userProfileRoutes);
 
 // start node server
 const port = process.env.PORT || global.gConfig.port;
