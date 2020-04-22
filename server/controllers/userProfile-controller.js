@@ -32,7 +32,7 @@ function validateMessage(messages) {
 exports.getUserProfile = async (req, res) => {
     let db = req.app.locals.database;
     let collection = db.collection("userProfile");
-    const query = { email: req.query.email};
+    const query = { email: req.query.email };
     collection.find(query).toArray(function (err, result) {
         if (err) {
             res.json({ error: err.message })
@@ -49,9 +49,9 @@ exports.updateProfileRequest = async (req, res) => {
         let userProfileRequest = req.body;
 
         var userProfileData = {
-            // firstName: userProfileRequest.firstName,
-            // lastName: userProfileRequest.lastName,
             // email: userProfileRequest.email,
+            firstName: userProfileRequest.firstName,
+            lastName: userProfileRequest.lastName,
             contactNumber: userProfileRequest.contactNumber,
             AddressLine1: userProfileRequest.AddressLine1,
             AddressLine2: userProfileRequest.AddressLine2,
@@ -81,27 +81,27 @@ exports.updateProfileRequest = async (req, res) => {
 
 // store userProfile request
 exports.postUserProfileRequest = async (req, res) => {
-        let db = req.app.locals.database;
-        let collection = db.collection("userProfile");
+    let db = req.app.locals.database;
+    let collection = db.collection("userProfile");
 
-        let userProfileRequest = req.body;
+    let userProfileRequest = req.body;
 
-        var userProfileData = {
-            firstName: userProfileRequest.firstName,
-            lastName: userProfileRequest.lastName,
-            email: userProfileRequest.email,
-            contactNumber: userProfileRequest.contactNumber,
-            AddressLine1: userProfileRequest.AddressLine1,
-            AddressLine2: userProfileRequest.AddressLine2,
-            AddressLine3: userProfileRequest.AddressLine3,
-            city: userProfileRequest.city,
-            country: userProfileRequest.country,
-            postCode: userProfileRequest.postCode
-        };
+    var userProfileData = {
+        firstName: userProfileRequest.firstName,
+        lastName: userProfileRequest.lastName,
+        email: userProfileRequest.email,
+        contactNumber: userProfileRequest.contactNumber,
+        AddressLine1: userProfileRequest.AddressLine1,
+        AddressLine2: userProfileRequest.AddressLine2,
+        AddressLine3: userProfileRequest.AddressLine3,
+        city: userProfileRequest.city,
+        country: userProfileRequest.country,
+        postCode: userProfileRequest.postCode
+    };
 
-        let myData = new userProfile(userProfileData);
-        await collection.insertOne(myData);
-        var messageText =
-            "User profile has been submitted successfully";
-        res.json({ message: messageText });
+    let myData = new userProfile(userProfileData);
+    await collection.insertOne(myData);
+    var messageText =
+        "User profile has been submitted successfully";
+    res.json({ message: messageText });
 };
