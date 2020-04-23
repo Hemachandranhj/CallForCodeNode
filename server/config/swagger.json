@@ -1,44 +1,380 @@
 {
-   "swagger": "2.0",
-   "info": {
-      "version": "1.0.0",
-      "title": "Assistance API"
-   },
-   "consumes": [
-      "text/plain"
-   ],
-   "produces": [
-      "application/json"
-   ],
-   "paths": {
-      "/health": {
-         "get": {
-            "operationId": "get",
-            "description": "Get health status of nodejsmicroservice",
-            "responses": {
-               "200": {
-                  "description": "Health check response",
-                  "schema": {
-                     "$ref": "#/definitions/healthResponse"
-                  },
-                  "examples": {
-                     "application/json": {
-                        "status": "UP"
-                     }
-                  }
-               }
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Assistance API"
+  },
+  "consumes": [
+    "text/plain"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/health": {
+      "get": {
+        "description": "Get health status",
+        "operationId": "health_get",
+        "responses": {
+          "200": {
+            "description": "Health check response",
+            "schema": {
+              "$ref": "#/definitions/healthResponse"
+            },
+            "examples": {
+              "application/json": {
+                "status": "UP"
+              }
             }
-         }
+          }
+        }
       }
-   },
-   "definitions": {
-      "healthResponse": {
-         "type": "object",
-         "properties": {
-            "status": {
-               "type": "string"
+    },
+    "/assistance": {
+      "get": {
+        "description": "Get list of assistance requests",
+        "operationId": "assistance_get",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "List of assistance requests",
+            "schema": {
+              "$ref": "#/definitions/assistanceResponse"
+            },
+            "examples": {
+              "application/json": {
+                "_id": "5e9e988e3cc74600859e636f",
+                "tag": "Essentials",
+                "isActioned": true,
+                "name": "Jude,",
+                "phone": "18242819718,",
+                "itemRequested": "Need Bread\",",
+                "address": "Birmingham,",
+                "date": "2020-04-21T06:54:06.544Z"
+              }
             }
-         }
+          }
+        }
+      },
+      "post": {
+        "description": "send assistance requests",
+        "operationId": "assistance_post",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "request",
+            "in": "body",
+            "description": "Message Id from twilio",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/assistanceRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "assistance request",
+            "schema": {
+              "$ref": "#/definitions/assistance"
+            },
+            "examples": {
+              "application/json": {
+                "_id": "5e9e988e3cc74600859e636f",
+                "tag": "Essentials",
+                "isActioned": true,
+                "name": "Jude,",
+                "phone": "18242819718,",
+                "itemRequested": "Need Bread\",",
+                "address": "Birmingham,",
+                "date": "2020-04-21T06:54:06.544Z"
+              }
+            }
+          }
+        }
       }
-   }
+    },
+    "/assistance/acceptRequest": {
+      "post": {
+        "description": "Accept assistance requests",
+        "operationId": "assistance_acceptrequest",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "request",
+            "in": "body",
+            "description": "acceptance request",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/acceptanceRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "acceptance response",
+            "schema": {
+              "$ref": "#/definitions/messageResponse"
+            },
+            "examples": {
+              "application/json": {
+                "message": "accepted"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/profile": {
+      "get": {
+        "description": "Get user profile",
+        "operationId": "Userprofile_Get",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "email",
+            "in": "query",
+            "description": "user email address",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "user profile",
+            "schema": {
+              "$ref": "#/definitions/userProfileResponse"
+            },
+            "examples": {
+              "application/json": {
+                "firstName": "Test",
+                "lastName": "User",
+                "email": "test@testcom",
+                "contactNumber": 123456789,
+                "AddressLine1": 120,
+                "AddressLine2": "Chapel Street",
+                "AddressLine3": "Newland",
+                "city": "New York",
+                "country": "United states",
+                "postCode": "TRE 123"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Create user profile",
+        "operationId": "Userprofile_Create",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "request",
+            "in": "body",
+            "description": "user profile",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/userProfile"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "user profile creation success/failure message",
+            "schema": {
+              "$ref": "#/definitions/messageResponse"
+            },
+            "examples": {
+              "application/json": {
+                "message": "Created sucessfully"
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Modify user profile",
+        "operationId": "Userprofile_Modify",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "request",
+            "in": "body",
+            "description": "user profile",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/userProfile"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "user profile creation success/failure message",
+            "schema": {
+              "$ref": "#/definitions/messageResponse"
+            },
+            "examples": {
+              "application/json": {
+                "message": "Updated sucessfully"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "healthResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string"
+        }
+      }
+    },
+    "assistanceResponse": {
+      "type": "object",
+      "properties": {
+        "result": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/assistance"
+          }
+        }
+      }
+    },
+    "assistance": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "format": "guid"
+        },
+        "name": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "itemRequested": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        },
+        "tag": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "date": {
+          "type": "string",
+          "format": "date"
+        },
+        "isActioned": {
+          "type": "boolean"
+        }
+      }
+    },
+    "assistanceRequest": {
+      "type": "object",
+      "properties": {
+        "MessageSid": {
+          "type": "string"
+        }
+      }
+    },
+    "acceptanceRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "guid"
+        },
+        "from": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        }
+      }
+    },
+    "messageResponse": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "userProfileResponse": {
+      "type": "object",
+      "properties": {
+        "result": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/userProfile"
+          }
+        }
+      }
+    },
+    "userProfile": {
+      "type": "object",
+      "properties": {
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "contactNumber": {
+          "type": "string"
+        },
+        "AddressLine1": {
+          "type": "string"
+        },
+        "AddressLine2": {
+          "type": "string"
+        },
+        "AddressLine3": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        },
+        "postCode": {
+          "type": "string"
+        }
+      }
+    }
+  }
 }
