@@ -15,6 +15,9 @@
       "get": {
         "description": "Get health status",
         "operationId": "health_get",
+        "tags": [
+          "HealthCheck"
+        ],
         "responses": {
           "200": {
             "description": "Health check response",
@@ -34,6 +37,9 @@
       "get": {
         "description": "Get list of assistance requests",
         "operationId": "assistance_get",
+        "tags": [
+          "Assistance"
+        ],
         "produces": [
           "application/json"
         ],
@@ -61,6 +67,9 @@
       "post": {
         "description": "send assistance requests",
         "operationId": "assistance_post",
+        "tags": [
+          "Assistance"
+        ],
         "consumes": [
           "application/json"
         ],
@@ -104,6 +113,9 @@
       "post": {
         "description": "Accept assistance requests",
         "operationId": "assistance_acceptrequest",
+        "tags": [
+          "Assistance"
+        ],
         "consumes": [
           "application/json"
         ],
@@ -140,6 +152,9 @@
       "get": {
         "description": "Get user profile",
         "operationId": "Userprofile_Get",
+        "tags": [
+          "Profile"
+        ],
         "produces": [
           "application/json"
         ],
@@ -178,6 +193,9 @@
       "post": {
         "description": "Create user profile",
         "operationId": "Userprofile_Create",
+        "tags": [
+          "Profile"
+        ],
         "consumes": [
           "application/json"
         ],
@@ -212,6 +230,9 @@
       "put": {
         "description": "Modify user profile",
         "operationId": "Userprofile_Modify",
+        "tags": [
+          "Profile"
+        ],
         "consumes": [
           "application/json"
         ],

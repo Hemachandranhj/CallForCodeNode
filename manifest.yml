@@ -9,6 +9,6 @@ applications:
   routes:
   - route: assistanceservice.eu-gb.cf.appdomain.cloud
   services:
-  - Twilio Programmable SMS-0y
+  - Twilio Programmable SMS-ee
   - Watson Assistant-1g
   timeout: 180
